@@ -7,7 +7,7 @@ from airflow.utils.task_group import TaskGroup
 pathScript = "/home/arnaldo/airflow/dags/avaliamusica"
 
 default_args = {
-   'owner': 'Arnaldo',
+   'owner': 'Arnaldo Almeida',
    'depends_on_past': False,
    'start_date': datetime(2021, 7, 25),
    'retries': 0,

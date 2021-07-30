@@ -15,7 +15,7 @@ default_args = {
 
 with DAG(
    'AvaliaMusica-PreProcessamento',
-   schedule_interval=timedelta(minutes=60),
+   schedule_interval=None,
    catchup=False,
    default_args=default_args
    ) as dag:

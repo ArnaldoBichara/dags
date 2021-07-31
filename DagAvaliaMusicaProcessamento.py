@@ -61,8 +61,8 @@ with DAG(
             dag=dag,
             task_id='LimpaArquivosIntermediarios',
             bash_command="""
+            
             cd {0}
-            rm FeatureStore/UserA_AudioFeatures.pickle
             rm FeatureStore/MusicasUserA.pickle
             """.format(pathScript)
         )

@@ -14,16 +14,16 @@ default_args = {
    }
 
 with DAG(
-   'AvaliaMusica-Processamento',
+    'AvaliaMusica-Processamento',
 #   schedule_interval=timedelta(minutes=60),
-   schedule_interval=None,
-   catchup=False,
-   default_args=default_args
-   ) as dag:
+    schedule_interval=None,
+    catchup=False,
+    default_args=default_args
+    ) as dag:
 
-   start = DummyOperator(task_id="start")
+    start = DummyOperator(task_id="start")
         
-   with TaskGroup("ImportaMusUserA", tooltip="Importa UserA do Spotify") as importausera:
+    with TaskGroup("ImportaMusUserA", tooltip="Importa UserA do Spotify") as importausera:
         
         tgetUserA = BashOperator(
             dag=dag,
@@ -64,7 +64,6 @@ with DAG(
             bash_command="""
             
             cd {0}
-            "rm FeatureStore/MusicasUserA.pickle
             """.format(pathScript)
         )
         
@@ -72,10 +71,9 @@ with DAG(
         tgetUserA >> tgetAFeatures
         tgetAFeatures >> tincluiAFeatures
         tincluiAUsers >> tlimpa
-        tgetAFeatures >> tlimpa
         tincluiAFeatures >> tlimpa
-        
-with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
+
+    with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
         
         tfiltraFeatures = BashOperator(
             dag=dag,
@@ -87,5 +85,5 @@ with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
         )
         tfiltraFeatures
    
-   end = DummyOperator(task_id='end')
-   start >> importausera >> filtra >> end
+    end = DummyOperator(task_id='end')
+    start >> importausera >> filtra >> end

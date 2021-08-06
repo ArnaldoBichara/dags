@@ -57,14 +57,7 @@ with DAG(
             python3 IncluiUserA_em_AudioFeatures.py
             """.format(pathScript)
         )
-        tfiltraFeatures = BashOperator(
-            dag=dag,
-            task_id='FiltraAudioFeatures',
-            bash_command="""
-            cd {0}
-            python3 FiltraAudioFeatures.py
-            """.format(pathScript)
-        )
+
         tlimpa = BashOperator(
             dag=dag,
             task_id='LimpaArquivosIntermediarios',
@@ -78,11 +71,21 @@ with DAG(
         tgetUserA >> tincluiAUsers
         tgetUserA >> tgetAFeatures
         tgetAFeatures >> tincluiAFeatures
-        tincluiAFeatures >> tfiltraFeatures
         tincluiAUsers >> tlimpa
         tgetAFeatures >> tlimpa
         tincluiAFeatures >> tlimpa
         
-
+with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
+        
+        tfiltraFeatures = BashOperator(
+            dag=dag,
+            task_id='FiltraAudioFeatures',
+            bash_command="""
+            cd {0}
+            python3 FiltraAudioFeatures.py
+            """.format(pathScript)
+        )
+        tfiltraFeatures
+   
    end = DummyOperator(task_id='end')
-   start >> importausera >> end
+   start >> importausera >> filtra >> end

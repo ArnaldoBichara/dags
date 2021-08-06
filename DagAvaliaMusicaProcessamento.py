@@ -71,7 +71,7 @@ with DAG(
             bash_command="""
             
             cd {0}
-            rm FeatureStore/MusicasUserA.pickle
+            "rm FeatureStore/MusicasUserA.pickle
             """.format(pathScript)
         )
         

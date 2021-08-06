@@ -25,7 +25,7 @@ with DAG(
         
    with TaskGroup("ImportaMusUserA", tooltip="Importa UserA do Spotify") as importausera:
         
-        t3 = BashOperator(
+        tgetUserA = BashOperator(
             dag=dag,
             task_id='ImportSpotifyUserA',
             bash_command="""
@@ -33,7 +33,7 @@ with DAG(
             python3 GetMusUserA.py
             """.format(pathScript)
         )
-        t4 = BashOperator(
+        tincluiAUsers = BashOperator(
             dag=dag,
             task_id='IncluiUserA_em_Users',
             bash_command="""
@@ -41,7 +41,7 @@ with DAG(
             python3 IncluiUserA_em_Users.py
             """.format(pathScript)
         )
-        t5 = BashOperator(
+        tgetAFeatures = BashOperator(
             dag=dag,
             task_id='GetUserA_AudioFeatures',
             bash_command="""
@@ -49,7 +49,7 @@ with DAG(
             python3 GetUserA_AudioFeatures.py
             """.format(pathScript)
         )
-        t6 = BashOperator(
+        tincluiAFeatures = BashOperator(
             dag=dag,
             task_id='IncluiUserA_em_AudioFeatures',
             bash_command="""
@@ -57,7 +57,15 @@ with DAG(
             python3 IncluiUserA_em_AudioFeatures.py
             """.format(pathScript)
         )
-        t7 = BashOperator(
+        tfiltraFeatures = BashOperator(
+            dag=dag,
+            task_id='FiltraAudioFeatures',
+            bash_command="""
+            cd {0}
+            python3 FiltraAudioFeatures.py
+            """.format(pathScript)
+        )
+        tlimpa = BashOperator(
             dag=dag,
             task_id='LimpaArquivosIntermediarios',
             bash_command="""
@@ -67,12 +75,14 @@ with DAG(
             """.format(pathScript)
         )
         
-        t3 >> t4
-        t3 >> t5
-        t3 >> t6
-        t4 >> t7
-        t5 >> t7
-        t6 >> t7
+        tgetUserA >> tincluiAUsers
+        tgetUserA >> tgetAFeatures
+        tgetAFeatures >> tincluiAFeatures
+        tincluiAFeatures >> tfiltraFeatures
+        tincluiAUsers >> tlimpa
+        tgetAFeatures >> tlimpa
+        tincluiAFeatures >> tlimpa
+        
 
    end = DummyOperator(task_id='end')
    start >> importausera >> end

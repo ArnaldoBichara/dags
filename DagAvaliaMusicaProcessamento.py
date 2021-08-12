@@ -107,7 +107,19 @@ with DAG(
             """.format(pathScript)
         )
         tAnalisaFeatures
+        
+    with TaskGroup("Normalização", tooltip="Normalização de dados") as normaliza:
+        
+        tNormalizaFeatures = BashOperator(
+            dag=dag,
+            task_id='NormalizaAudioFeatures',
+            bash_command="""
+            cd {0}
+            python3 "NormalizaAudioFeatures.py"
+            """.format(pathScript)
+        )
+        tNormalizaFeatures
    
     end = DummyOperator(task_id='end')
     
-    start >> init >> importausera >> filtra >> analisa >> end
+    start >> init >> importausera >> filtra >> analisa >> normaliza >> end

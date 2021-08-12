@@ -33,12 +33,19 @@ with DAG(
             """.format(pathScript)
         )
         t0
+    with TaskGroup("Importa_Músicas", tooltip="Importa Músicas do Spotify") as importa_mus:
         
-    with TaskGroup("ImportaMusUserA", tooltip="Importa UserA do Spotify") as importausera:
-        
+        tgetAudioFeatures = BashOperator(
+            dag=dag,
+            task_id='Get_AudioFeatures',
+            bash_command="""
+            cd {0}
+            python3 GetAudioFeatures.py
+            """.format(pathScript)
+        )        
         tgetUserA = BashOperator(
             dag=dag,
-            task_id='ImportSpotifyUserA',
+            task_id='Import_UserA_do_Spotify',
             bash_command="""
             cd {0}
             python3 GetMusUserA.py
@@ -46,7 +53,7 @@ with DAG(
         )
         tincluiAUsers = BashOperator(
             dag=dag,
-            task_id='IncluiUserA_em_Users',
+            task_id='Inclui_UserA_em_Users',
             bash_command="""
             cd {0}
             python3 IncluiUserA_em_Users.py
@@ -54,7 +61,7 @@ with DAG(
         )
         tgetAFeatures = BashOperator(
             dag=dag,
-            task_id='GetUserA_AudioFeatures',
+            task_id='Get_UserA_AudioFeatures',
             bash_command="""
             cd {0}
             python3 GetUserA_AudioFeatures.py
@@ -62,33 +69,24 @@ with DAG(
         )
         tincluiAFeatures = BashOperator(
             dag=dag,
-            task_id='IncluiUserA_em_AudioFeatures',
+            task_id='Inclui_UserA_em_AudioFeatures',
             bash_command="""
             cd {0}
             python3 IncluiUserA_em_AudioFeatures.py
             """.format(pathScript)
         )
 
-        tlimpa = BashOperator(
-            dag=dag,
-            task_id='LimpaArquivosIntermediarios',
-            bash_command="""
-            
-            cd {0}
-            """.format(pathScript)
-        )
-        
+         
         tgetUserA >> tincluiAUsers
         tgetUserA >> tgetAFeatures
         tgetAFeatures >> tincluiAFeatures
-        tincluiAUsers >> tlimpa
-        tincluiAFeatures >> tlimpa
+        tgetAudioFeatures >> tincluiAFeatures
 
     with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
         
         tfiltraFeatures = BashOperator(
             dag=dag,
-            task_id='FiltraAudioFeatures',
+            task_id='Filtra_AudioFeatures',
             bash_command="""
             cd {0}
             python3 FiltraAudioFeatures.py
@@ -100,7 +98,7 @@ with DAG(
         
         tAnalisaFeatures = BashOperator(
             dag=dag,
-            task_id='AnalisaAudioFeatures',
+            task_id='Analisa_AudioFeatures',
             bash_command="""
             cd {0}
             python3 "Análise AudioFeatures.py"
@@ -112,7 +110,7 @@ with DAG(
         
         tNormalizaFeatures = BashOperator(
             dag=dag,
-            task_id='NormalizaAudioFeatures',
+            task_id='Normaliza_AudioFeatures',
             bash_command="""
             cd {0}
             python3 "NormalizaAudioFeatures.py"
@@ -122,4 +120,4 @@ with DAG(
    
     end = DummyOperator(task_id='end')
     
-    start >> init >> importausera >> filtra >> analisa >> normaliza >> end
+    start >> init >> importa_mus >> filtra >> analisa >> normaliza >> end

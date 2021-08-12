@@ -22,6 +22,17 @@ with DAG(
     ) as dag:
 
     start = DummyOperator(task_id="start")
+    
+    with TaskGroup("Init", tooltip="Cria Diretorios") as init:
+        t0 = BashOperator(
+            dag=dag,
+            task_id='CriaDiretorios',
+            bash_command="""
+            cd {0}
+            mkdir -p 'Resultado das Análises'
+            """.format(pathScript)
+        )
+        t0
         
     with TaskGroup("ImportaMusUserA", tooltip="Importa UserA do Spotify") as importausera:
         
@@ -84,6 +95,19 @@ with DAG(
             """.format(pathScript)
         )
         tfiltraFeatures
+
+    with TaskGroup("Análises", tooltip="Análise de dados") as analisa:
+        
+        tAnalisaFeatures = BashOperator(
+            dag=dag,
+            task_id='AnalisaAudioFeatures',
+            bash_command="""
+            cd {0}
+            python3 "Análise AudioFeatures.py"
+            """.format(pathScript)
+        )
+        tAnalisaFeatures
    
     end = DummyOperator(task_id='end')
-    start >> importausera >> filtra >> end
+    
+    start >> init >> importausera >> filtra >> analisa >> end

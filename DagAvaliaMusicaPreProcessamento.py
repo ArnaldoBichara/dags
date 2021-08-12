@@ -44,15 +44,7 @@ with DAG(
             python3 GetMusUsers.py
             """.format(pathScript)
         )
-        t2 = BashOperator(
-            dag=dag,
-            task_id='GetAudioFeatures',
-            bash_command="""
-            cd {0}
-            python3 GetAudioFeatures.py
-            """.format(pathScript)
-        )
-        [t1,t2]
+        [t1]
 
 
    end = DummyOperator(task_id='end')

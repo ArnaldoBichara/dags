@@ -37,7 +37,7 @@ with DAG(
             task_id='Limpa_Logs',
             bash_command="""
             cd {0}
-            rm -f './Resultado das Análises/PreProcessamento2.log'
+            rm -f './Resultado das Análises/preprocessamento2.log'
             """.format(pathScript)
         )
         [t0, t1]

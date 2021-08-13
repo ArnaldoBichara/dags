@@ -30,6 +30,7 @@ with DAG(
             bash_command="""
             cd {0}
             mkdir -p FeatureStore
+            mkdir -p "Resultado das Análises"
             """.format(pathScript)
         )
         t0

@@ -34,10 +34,12 @@ with DAG(
         )
         t1 = BashOperator(
             dag=dag,
-            task_id='Limpa_Logs',
+            task_id='Limpa_Arquivos',
             bash_command="""
             cd {0}
             rm -f './Resultado das Análises/preprocessamento2.log'
+            rm -f './Resultado das Análises/Histograma*'
+            rm -f './Resultado das Análises/AudioFeatures.txt'
             """.format(pathScript)
         )
         [t0, t1]

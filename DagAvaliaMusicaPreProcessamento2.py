@@ -14,7 +14,7 @@ default_args = {
    }
 
 with DAG(
-    'AvaliaMusica-Processamento',
+    'AvaliaMusica-PreProcessamento2',
 #   schedule_interval=timedelta(minutes=60),
     schedule_interval=None,
     catchup=False,
@@ -32,7 +32,16 @@ with DAG(
             mkdir -p 'Resultado das Análises'
             """.format(pathScript)
         )
-        t0
+        t1 = BashOperator(
+            dag=dag,
+            task_id='Limpa_Logs',
+            bash_command="""
+            cd {0}
+            rm -f './Resultado das Análises/PreProcessamento2.log'
+            """.format(pathScript)
+        )
+        [t0, t1]
+    
     with TaskGroup("Importa_Músicas", tooltip="Importa Músicas do Spotify") as importa_mus:
         
         tgetAudioFeatures = BashOperator(

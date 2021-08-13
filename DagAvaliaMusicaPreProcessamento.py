@@ -26,14 +26,23 @@ with DAG(
    with TaskGroup("Init", tooltip="Cria Diretorios") as init:
         t0 = BashOperator(
             dag=dag,
-            task_id='CriaDiretorios',
+            task_id='Cria_Diretorios',
             bash_command="""
             cd {0}
             mkdir -p FeatureStore
             mkdir -p "Resultado das Análises"
             """.format(pathScript)
         )
-        t0
+        t1 = BashOperator(
+            dag=dag,
+            task_id='Limpa_Logs',
+            bash_command="""
+            cd {0}
+            rm -f './Resultado das Análises/*.log'
+            """.format(pathScript)
+        )
+        [t0, t1]        
+        
 
    with TaskGroup("ImportaDataSets", tooltip="Lê Datasets") as ledatasets:
         

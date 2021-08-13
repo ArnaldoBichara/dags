@@ -23,7 +23,7 @@ with DAG(
 
     start = DummyOperator(task_id="start")
     
-    with TaskGroup("Init", tooltip="Cria Diretorios") as init:
+    with TaskGroup("Init", tooltip="Iniciações") as init:
         t0 = BashOperator(
             dag=dag,
             task_id='CriaDiretorios',

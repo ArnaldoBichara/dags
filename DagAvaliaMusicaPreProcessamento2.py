@@ -62,14 +62,6 @@ with DAG(
             python3 GetMusUserA.py
             """.format(pathScript)
         )
-        tincluiAUsers = BashOperator(
-            dag=dag,
-            task_id='Inclui_UserA_em_Users',
-            bash_command="""
-            cd {0}
-            python3 IncluiUserA_em_Users.py
-            """.format(pathScript)
-        )
         tgetAFeatures = BashOperator(
             dag=dag,
             task_id='Get_UserA_AudioFeatures',
@@ -78,20 +70,9 @@ with DAG(
             python3 GetUserA_AudioFeatures.py
             """.format(pathScript)
         )
-        tincluiAFeatures = BashOperator(
-            dag=dag,
-            task_id='Inclui_UserA_em_AudioFeatures',
-            bash_command="""
-            cd {0}
-            python3 IncluiUserA_em_AudioFeatures.py
-            """.format(pathScript)
-        )
-
          
-        tgetUserA >> tincluiAUsers
+        tgetAudioFeatures
         tgetUserA >> tgetAFeatures
-        tgetAFeatures >> tincluiAFeatures
-        tgetAudioFeatures >> tincluiAFeatures
 
     with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
         

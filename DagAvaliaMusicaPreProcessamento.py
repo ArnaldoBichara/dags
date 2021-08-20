@@ -77,15 +77,6 @@ with DAG(
             python3 FiltraUsers.py
             """.format(pathScript)
         )
-        tfiltraFeatures = BashOperator(
-            dag=dag,
-            task_id='Filtra_AudioFeatures',
-            bash_command="""
-            cd {0}
-            python3 FiltraAudioFeatures.py
-            """.format(pathScript)
-        )
-        tfiltraFeatures
         tfiltraUsers        
         
 

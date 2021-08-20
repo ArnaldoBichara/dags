@@ -86,7 +86,7 @@ with DAG(
         )
         tfiltraUsers = BashOperator(
             dag=dag,
-            task_id='Filtra_AudioFeatures',
+            task_id='Filtra_Users',
             bash_command="""
             cd {0}
             python3 FiltraUsers.py

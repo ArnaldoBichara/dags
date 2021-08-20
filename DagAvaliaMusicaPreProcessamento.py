@@ -30,7 +30,7 @@ with DAG(
             bash_command="""
             cd {0}
             mkdir -p FeatureStore
-            mkdir -p "Resultado das Análises"
+            mkdir -p Analises
             """.format(pathScript)
         )
         t1 = BashOperator(
@@ -38,13 +38,15 @@ with DAG(
             task_id='Limpa_Arquivos',
             bash_command="""
             cd {0}
-            rm -f './Resultado das Análises/*.log'
-            rm -f './Resultado das Análises/Histograma*'
-            rm -f './Resultado das Análises/AudioFeatures.txt'
+            rm -f ./Analises/*.log
+            rm -f ./Analises/Histograma*
+            rm -f ./Analises/AudioFeatures.txt
+            touch ./Analises/preprocessamento.log
            
             """.format(pathScript)
         )
-        [t0, t1]        
+        t0
+        t1        
         
 
     with TaskGroup("ImportaDataSets", tooltip="Lê Datasets") as ledatasets:
@@ -78,8 +80,10 @@ with DAG(
             """.format(pathScript)
         )
         tfiltraUsers        
-        
+         
 
     end = DummyOperator(task_id='end')
    
     start >> init >> ledatasets >> filtra >> end
+
+        

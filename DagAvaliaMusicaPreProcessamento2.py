@@ -29,7 +29,7 @@ with DAG(
             task_id='CriaDiretorios',
             bash_command="""
             cd {0}
-            mkdir -p 'Resultado das Análises'
+            mkdir -p Analises
             """.format(pathScript)
         )
         t1 = BashOperator(
@@ -37,9 +37,10 @@ with DAG(
             task_id='Limpa_Arquivos',
             bash_command="""
             cd {0}
-            rm -f './Resultado das Análises/preprocessamento2.log'
-            rm -f './Resultado das Análises/Histograma*'
-            rm -f './Resultado das Análises/AudioFeatures.txt'
+            rm -f ./Analises/preprocessamento2.log
+            touch ./Analises/preprocessamento.log
+            rm -f ./Analises/Histograma*
+            rm -f ./Analises/AudioFeatures.txt
             """.format(pathScript)
         )
         [t0, t1]

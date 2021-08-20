@@ -64,18 +64,6 @@ with DAG(
         )
         tgetUserA >> tgetAFeatures
 
-    with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
-        
-        tfiltraFeatures = BashOperator(
-            dag=dag,
-            task_id='Filtra_AudioFeatures',
-            bash_command="""
-            cd {0}
-            python3 FiltraAudioFeatures.py
-            """.format(pathScript)
-        )
-        tfiltraFeatures
-
     with TaskGroup("Análises", tooltip="Análise de dados") as analisa:
         
         tAnalisaFeatures = BashOperator(
@@ -91,4 +79,4 @@ with DAG(
   
     end = DummyOperator(task_id='end')
     
-    start >> init >> importa_mus >> filtra >> analisa >> end
+    start >> init >> importa_mus >> analisa >> end

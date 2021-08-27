@@ -61,7 +61,7 @@ with DAG(
         )
         tgetMusUserA = BashOperator(
             dag=dag,
-            task_id='Import_UserA_do_Spotify',
+            task_id='GetMusUserA_do_Spotify',
             bash_command="""
             cd {0}
             python3 GetMusUserA.py

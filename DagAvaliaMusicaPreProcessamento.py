@@ -59,27 +59,52 @@ with DAG(
             python3 GetMusUsers.py
             """.format(pathScript)
         )
-        tgetAudioFeatures = BashOperator(
+        tgetMusUserA = BashOperator(
             dag=dag,
-            task_id='Get_AudioFeatures',
+            task_id='Import_UserA_do_Spotify',
             bash_command="""
             cd {0}
-            python3 GetAudioFeatures.py
+            python3 GetMusUserA.py
+            """.format(pathScript)
+        )        
+        tgetFeatures = BashOperator(
+            dag=dag,
+            task_id='Get_Features_E_Dominio_Das_Musicas',
+            bash_command="""
+            cd {0}
+            python3 GetFeaturesEDominioDasMusicas.py
             """.format(pathScript)
         ) 
         t1
-        tgetAudioFeatures
+        tgetMusUserA
+        tgetFeatures
 
     with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
         tfiltraUsers = BashOperator(
             dag=dag,
-            task_id='Filtra_Users',
+            task_id='Busca_MusUsers_No_Dominio',
             bash_command="""
             cd {0}
-            python3 FiltraUsers.py
+            python3 BuscaMusUsersNoDominio.py
             """.format(pathScript)
         )
-        tfiltraUsers        
+        tAnalisaMusUsers = BashOperator(
+            dag=dag,
+            task_id='AnalisaMusUsers',
+            bash_command="""
+            cd {0}
+            python3 AnalisaMusUsers.py
+            """.format(pathScript)
+        )
+        tRemoveUsuariosOutliers = BashOperator(
+            dag=dag,
+            task_id='Remove_Usuarios_Outliers',
+            bash_command="""
+            cd {0}
+            python3 RemoveUsuariosOutliers.py
+            """.format(pathScript)
+        )
+        tfiltraUsers >> tAnalisaMusUsers >> tRemoveUsuariosOutliers
          
 
     end = DummyOperator(task_id='end')

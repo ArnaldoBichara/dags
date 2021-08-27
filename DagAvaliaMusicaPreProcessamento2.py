@@ -47,14 +47,6 @@ with DAG(
     
     with TaskGroup("Importa_Músicas", tooltip="Importa Músicas do Spotify") as importa_mus:
         
-        tgetUserA = BashOperator(
-            dag=dag,
-            task_id='Import_UserA_do_Spotify',
-            bash_command="""
-            cd {0}
-            python3 GetMusUserA.py
-            """.format(pathScript)
-        )
         tgetAFeatures = BashOperator(
             dag=dag,
             task_id='Get_UserA_AudioFeatures',
@@ -63,9 +55,17 @@ with DAG(
             python3 GetUserA_AudioFeatures.py
             """.format(pathScript)
         )
-        tgetUserA >> tgetAFeatures
+        tgetAFeatures
 
     with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
+        tAnaliseFeatures = BashOperator(
+            dag=dag,
+            task_id='Análise_AudioFeatures',
+            bash_command="""
+            cd {0}
+            python3 'Análise AudioFeatures.py'
+            """.format(pathScript)
+        )
         tfiltraFeatures = BashOperator(
             dag=dag,
             task_id='Filtra_AudioFeatures',

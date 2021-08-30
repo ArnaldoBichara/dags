@@ -113,7 +113,7 @@ with DAG(
             """.format(pathScript)
         )
 
-        tfiltraUsers >> tAnalisaMusUsers >> tRemoveUsuariosOutliers
+        tfiltraUsers >> tAnalisaMusUsers >> tRemoveUsuariosOutliers >> tFiltraDomMusicasColab
          
 
     end = DummyOperator(task_id='end')

@@ -106,7 +106,7 @@ with DAG(
         )
         tFiltraDomMusicasColab = BashOperator(
             dag=dag,
-            task_id='Filtra Dominio Musicas Colab',
+            task_id='Filtra_Dominio_Musicas_Colab',
             bash_command="""
             cd {0}
             python3 FiltraDomMusicasColab.py

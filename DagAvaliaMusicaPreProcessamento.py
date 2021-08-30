@@ -72,7 +72,7 @@ with DAG(
             task_id='Get_Features_E_Dominio_Das_Musicas',
             bash_command="""
             cd {0}
-            python3 GetFeaturesEDominioDasMusicas.py
+            python3 GetFeaturesEDominiodasMusicas.py
             """.format(pathScript)
         ) 
         t1

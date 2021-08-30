@@ -104,6 +104,15 @@ with DAG(
             python3 RemoveUsuariosOutliers.py
             """.format(pathScript)
         )
+        tFiltraDomMusicasColab = BashOperator(
+            dag=dag,
+            task_id='Filtra Dominio Musicas Colab',
+            bash_command="""
+            cd {0}
+            python3 FiltraDomMusicasColab.py
+            """.format(pathScript)
+        )
+
         tfiltraUsers >> tAnalisaMusUsers >> tRemoveUsuariosOutliers
          
 

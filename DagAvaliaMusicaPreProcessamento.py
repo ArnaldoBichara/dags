@@ -96,24 +96,8 @@ with DAG(
             python3 AnalisaMusUsers.py
             """.format(pathScript)
         )
-        tRemoveUsuariosOutliers = BashOperator(
-            dag=dag,
-            task_id='Remove_Usuarios_Outliers',
-            bash_command="""
-            cd {0}
-            python3 RemoveUsuariosOutliers.py
-            """.format(pathScript)
-        )
-        tFiltraDomMusicasColab = BashOperator(
-            dag=dag,
-            task_id='Filtra_Dominio_Musicas_Colab',
-            bash_command="""
-            cd {0}
-            python3 FiltraDomMusicasColab.py
-            """.format(pathScript)
-        )
 
-        tfiltraUsers >> tAnalisaMusUsers >> tRemoveUsuariosOutliers >> tFiltraDomMusicasColab
+        tfiltraUsers >> tAnalisaMusUsers 
          
 
     end = DummyOperator(task_id='end')

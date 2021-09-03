@@ -14,7 +14,7 @@ default_args = {
    }
 
 with DAG(
-   'AvaliaMusica-PreProcessamento Colab',
+   'AvaliaMusica-PreProcessamento-Colab',
    schedule_interval=None,
    catchup=False,
    default_args=default_args
@@ -54,7 +54,7 @@ with DAG(
             python3 FiltraDomMusicasColab.py
             """.format(pathScript)
         )
-        tFiltraDomMusicasColab = BashOperator(
+        tPreProcessaColab = BashOperator(
             dag=dag,
             task_id='Pre_Processa_Colab',
             bash_command="""
@@ -62,9 +62,20 @@ with DAG(
             python3 PreProcessaColab.py
             """.format(pathScript)
         )
-        tRemoveUsuariosOutliers >> tFiltraDomMusicasColab >> tFiltraDomMusicasColab
+        tRemoveUsuariosOutliers >> tFiltraDomMusicasColab >> tPreProcessaColab
+        
+    with TaskGroup("ProcessaColab", tooltip="") as processa:
+        tProcessaColab = BashOperator(
+            dag=dag,
+            task_id='Processa_Colab',
+            bash_command="""
+            cd {0}
+            python3 DescobreUsuariosVizinhos.py
+            """.format(pathScript)
+        )
+        tProcessaColab        
          
     end = DummyOperator(task_id='end')
    
-    start >> init >> preproc >> end
+    start >> init >> preproc >> processa >> end
        

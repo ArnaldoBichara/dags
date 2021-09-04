@@ -277,4 +277,4 @@ with DAG(
          
     end = DummyOperator(task_id='end')
    
-    start >> init > proc1 > proc2 > proc3 > proc4 > proc5 > proc6 > proc7 >> end
+    start >> init >> proc1 >> proc2 >> proc3 >> proc4 >> proc5 >> proc6 >> proc7 >> end

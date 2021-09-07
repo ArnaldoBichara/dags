@@ -30,6 +30,8 @@ with DAG(
             cd {0}
             rm -f ./Analises/preprocessamentoColab.log
             touch ./Analises/preprocessamentoColab.log
+            rm -f ./FeatureStore/ColabVizinhosUserA.pickle            
+            rm -f ./FeatureStore/ColabVizinhosUserAbarra.pickle            
            
             """.format(pathScript)
         )
@@ -273,8 +275,19 @@ with DAG(
             python3 ColabProcessaUsuariosVizinhos.py
             """.format(pathScript)
         )
-        t0 >> t1 >> t2 >> tProcessaColab        
+        t0 >> t1 >> t2 >> tProcessaColab      
+    
+    with TaskGroup("MontaMusCandidatas", tooltip="Monta Músicas Candidatas") as montaMusColab:
+        t1 = BashOperator(
+            dag=dag,
+            task_id='MontaMusCandidatas',
+            bash_command="""
+            cd {0}
+            python3 ColabMontaMusCandidatas.py          
+            """.format(pathScript)
+        )
+        t1     
          
     end = DummyOperator(task_id='end')
    
-    start >> init >> proc1 >> proc2 >> proc3 >> proc4 >> proc5 >> proc6 >> proc7 >> end
+    start >> init >> proc1 >> proc2 >> proc3 >> proc4 >> proc5 >> proc6 >> proc7 >> montaMusColab>> end

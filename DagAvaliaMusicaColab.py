@@ -28,8 +28,7 @@ with DAG(
             task_id='Limpa_Arquivos',
             bash_command="""
             cd {0}
-            rm -f ./Analises/preprocessamentoColab.log
-            touch ./Analises/preprocessamentoColab.log
+            rm -f ./Analises/processamentoColab.log
             rm -f ./FeatureStore/ColabVizinhosUserA.pickle            
             rm -f ./FeatureStore/ColabVizinhosUserAbarra.pickle            
            

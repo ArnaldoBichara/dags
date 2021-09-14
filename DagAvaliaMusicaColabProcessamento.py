@@ -29,35 +29,31 @@ with DAG(
             bash_command="""
             cd {0}
             rm -f ./Analises/processamentoColab.log
+            rm -f ./Analises/ColabMusUserAEsparsa.pickle
+            rm -f ./Analises/ColabMusUserAbarraEsparsa.pickle
             rm -f ./FeatureStore/ColabVizinhosUserA.pickle            
             rm -f ./FeatureStore/ColabVizinhosUserAbarra.pickle       
             """.format(pathScript)
         )
         t0        
         
-    with TaskGroup("50_150", tooltip=" ") as proc1:
+    with TaskGroup("Filtra_Users_Outliers50_150", tooltip=" ") as filtra_outliers:
         t0= BashOperator(
             dag=dag,
             task_id='FiltraUsers',
             bash_command="""
             cd {0}
-            python3 ColabFiltraFaixaDeUsuarios.py 50 150
+            python3 ColabFiltraUsuariosOutliers
             """.format(pathScript)
         )
-        t1= BashOperator(
-            dag=dag,
-            task_id='FiltraDomMus',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraDomMusicas.py
-            """.format(pathScript)
-        )
+        t0
+    with TaskGroup("50-120", tooltip=" ") as proc1:    
         t2 = BashOperator(
             dag=dag,
             task_id='Preproc',
             bash_command="""
             cd {0}
-            python3 Preproc.py
+            python3 ColabPreProcessamento.py 50 120
             """.format(pathScript)
         )
         tProcessa = BashOperator(
@@ -68,34 +64,18 @@ with DAG(
             python3 ColabProcessaUsuariosVizinhos.py
             """.format(pathScript)
         )
-        t0 >> t1 >> t2 >> tProcessa        
+        t2 >> tProcessa        
 
-    with TaskGroup("151_230", tooltip="") as proc2:
-        t0= BashOperator(
-            dag=dag,
-            task_id='FiltraUsers',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraFaixaDeUsuarios.py 151 230
-            """.format(pathScript)
-        )
-        t1= BashOperator(
-            dag=dag,
-            task_id='FiltraDomMus',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraDomMusicas.py
-            """.format(pathScript)
-        )
+    with TaskGroup("121-200", tooltip=" ") as proc2:    
         t2 = BashOperator(
             dag=dag,
             task_id='Preproc',
             bash_command="""
             cd {0}
-            python3 Preproc.py
+            python3 ColabPreProcessamento.py 121 200
             """.format(pathScript)
         )
-        tProcessaColab = BashOperator(
+        tProcessa = BashOperator(
             dag=dag,
             task_id='Processa',
             bash_command="""
@@ -103,33 +83,18 @@ with DAG(
             python3 ColabProcessaUsuariosVizinhos.py
             """.format(pathScript)
         )
-        t0 >> t1 >> t2 >> tProcessaColab        
-    with TaskGroup("231_350", tooltip="") as proc3:
-        t0= BashOperator(
-            dag=dag,
-            task_id='FiltraUsers',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraFaixaDeUsuarios.py 231 350
-            """.format(pathScript)
-        )
-        t1= BashOperator(
-            dag=dag,
-            task_id='FiltraDomMus',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraDomMusicas.py
-            """.format(pathScript)
-        )
+        t2 >> tProcessa        
+
+    with TaskGroup("201-270", tooltip=" ") as proc3:    
         t2 = BashOperator(
             dag=dag,
             task_id='Preproc',
             bash_command="""
             cd {0}
-            python3 Preproc.py
+            python3 ColabPreProcessamento.py 201 270
             """.format(pathScript)
         )
-        tProcessaColab = BashOperator(
+        tProcessa = BashOperator(
             dag=dag,
             task_id='Processa',
             bash_command="""
@@ -137,33 +102,18 @@ with DAG(
             python3 ColabProcessaUsuariosVizinhos.py
             """.format(pathScript)
         )
-        t0 >> t1 >> t2 >> tProcessaColab        
-    with TaskGroup("351_500", tooltip="") as proc4:
-        t0= BashOperator(
-            dag=dag,
-            task_id='FiltraUsers',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraFaixaDeUsuarios.py 351 500
-            """.format(pathScript)
-        )
-        t1= BashOperator(
-            dag=dag,
-            task_id='FiltraDomMus',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraDomMusicas.py
-            """.format(pathScript)
-        )
+        t2 >> tProcessa        
+
+    with TaskGroup("271-400", tooltip=" ") as proc4:    
         t2 = BashOperator(
             dag=dag,
             task_id='Preproc',
             bash_command="""
             cd {0}
-            python3 Preproc.py
+            python3 ColabPreProcessamento.py 271 400
             """.format(pathScript)
         )
-        tProcessaColab = BashOperator(
+        tProcessa = BashOperator(
             dag=dag,
             task_id='Processa',
             bash_command="""
@@ -171,33 +121,18 @@ with DAG(
             python3 ColabProcessaUsuariosVizinhos.py
             """.format(pathScript)
         )
-        t0 >> t1 >> t2 >> tProcessaColab        
-    with TaskGroup("501_800", tooltip="") as proc5:
-        t0= BashOperator(
-            dag=dag,
-            task_id='FiltraUsers',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraFaixaDeUsuarios.py 501 800
-            """.format(pathScript)
-        )
-        t1= BashOperator(
-            dag=dag,
-            task_id='FiltraDomMus',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraDomMusicas.py
-            """.format(pathScript)
-        )
+        t2 >> tProcessa        
+
+    with TaskGroup("401-700", tooltip=" ") as proc5:    
         t2 = BashOperator(
             dag=dag,
             task_id='Preproc',
             bash_command="""
             cd {0}
-            python3 Preproc.py
+            python3 ColabPreProcessamento.py 401 700
             """.format(pathScript)
         )
-        tProcessaColab = BashOperator(
+        tProcessa = BashOperator(
             dag=dag,
             task_id='Processa',
             bash_command="""
@@ -205,33 +140,18 @@ with DAG(
             python3 ColabProcessaUsuariosVizinhos.py
             """.format(pathScript)
         )
-        t0 >> t1 >> t2 >> tProcessaColab        
-    with TaskGroup("801_1500", tooltip="") as proc6:
-        t0= BashOperator(
-            dag=dag,
-            task_id='FiltraUsers',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraFaixaDeUsuarios.py 801 1500
-            """.format(pathScript)
-        )
-        t1= BashOperator(
-            dag=dag,
-            task_id='FiltraDomMus',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraDomMusicas.py
-            """.format(pathScript)
-        )
+        t2 >> tProcessa        
+
+    with TaskGroup("701-1200", tooltip=" ") as proc6:    
         t2 = BashOperator(
             dag=dag,
             task_id='Preproc',
             bash_command="""
             cd {0}
-            python3 Preproc.py
+            python3 ColabPreProcessamento.py 701 12000
             """.format(pathScript)
         )
-        tProcessaColab = BashOperator(
+        tProcessa = BashOperator(
             dag=dag,
             task_id='Processa',
             bash_command="""
@@ -239,33 +159,18 @@ with DAG(
             python3 ColabProcessaUsuariosVizinhos.py
             """.format(pathScript)
         )
-        t0 >> t1 >> t2 >> tProcessaColab        
-    with TaskGroup("1501_30000", tooltip="") as proc7:
-        t0= BashOperator(
-            dag=dag,
-            task_id='FiltraUsers',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraFaixaDeUsuarios.py 1501 30000
-            """.format(pathScript)
-        )
-        t1= BashOperator(
-            dag=dag,
-            task_id='FiltraDomMus',
-            bash_command="""
-            cd {0}
-            python3 ColabFiltraDomMusicas.py
-            """.format(pathScript)
-        )
+        t2 >> tProcessa        
+
+    with TaskGroup("1201-2000", tooltip=" ") as proc7:    
         t2 = BashOperator(
             dag=dag,
             task_id='Preproc',
             bash_command="""
             cd {0}
-            python3 Preproc.py
+            python3 ColabPreProcessamento.py 1201 2000
             """.format(pathScript)
         )
-        tProcessaColab = BashOperator(
+        tProcessa = BashOperator(
             dag=dag,
             task_id='Processa',
             bash_command="""
@@ -273,7 +178,8 @@ with DAG(
             python3 ColabProcessaUsuariosVizinhos.py
             """.format(pathScript)
         )
-        t0 >> t1 >> t2 >> tProcessaColab      
+        t2 >> tProcessa        
+
     
     with TaskGroup("MusCandidatas", tooltip="Monta Músicas Candidatas") as montaMusColab:
         t1 = BashOperator(
@@ -288,4 +194,4 @@ with DAG(
          
     end = DummyOperator(task_id='end')
 
-    start >> init >> proc1 >> proc2 >> proc3 >> proc4 >> proc5 >> proc6 >> proc7 >> montaMusColab >> end
+    start >> init >> filtra_outliers >> proc1 >> proc2 >> proc3 >> proc4 >> proc5 >> proc6 >> proc7 >> montaMusColab >> end

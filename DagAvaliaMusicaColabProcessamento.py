@@ -148,7 +148,7 @@ with DAG(
             task_id='Preproc',
             bash_command="""
             cd {0}
-            python3 ColabPreProcessamento.py 701 12000
+            python3 ColabPreProcessamento.py 701 1200
             """.format(pathScript)
         )
         tProcessa = BashOperator(

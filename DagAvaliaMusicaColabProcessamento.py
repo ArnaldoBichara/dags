@@ -37,13 +37,13 @@ with DAG(
         )
         t0        
         
-    with TaskGroup("Filtra_Users_Outliers50_150", tooltip=" ") as filtra_outliers:
+    with TaskGroup("Filtra_Outliers", tooltip=" ") as filtra_outliers:
         t0= BashOperator(
             dag=dag,
             task_id='FiltraUsers',
             bash_command="""
             cd {0}
-            python3 ColabFiltraUsuariosOutliers
+            python3 ColabFiltraUsuariosOutliers.py
             """.format(pathScript)
         )
         t0

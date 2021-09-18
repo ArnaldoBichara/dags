@@ -14,7 +14,7 @@ default_args = {
    }
 
 with DAG(
-    'AvaliaMusica-PreProcessamento2',
+    'AvaliaMusica2-PreProcessamento',
 #   schedule_interval=timedelta(minutes=60),
     schedule_interval=None,
     catchup=False,
@@ -44,7 +44,6 @@ with DAG(
             """.format(pathScript)
         )
         [t0, t1]
-    
     with TaskGroup("Importa_Músicas", tooltip="Importa Músicas do Spotify") as importa_mus:
         
         tgetAFeatures = BashOperator(
@@ -56,7 +55,6 @@ with DAG(
             """.format(pathScript)
         )
         tgetAFeatures
-
     with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
         tAnaliseFeatures = BashOperator(
             dag=dag,
@@ -75,20 +73,6 @@ with DAG(
             """.format(pathScript)
         )
         tfiltraFeatures
-
-    with TaskGroup("Análises", tooltip="Análise de dados") as analisa:
-        
-        tAnalisaFeatures = BashOperator(
-            dag=dag,
-            task_id='Analisa_AudioFeatures',
-            bash_command="""
-            cd {0}
-            python3 "Análise AudioFeatures.py"
-            """.format(pathScript)
-        )
-        tAnalisaFeatures
-        
-  
     end = DummyOperator(task_id='end')
     
-    start >> init >> importa_mus >> filtra >> analisa >> end
+    start >> init >> importa_mus >> filtra >> end

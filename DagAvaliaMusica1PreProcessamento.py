@@ -14,7 +14,7 @@ default_args = {
    }
 
 with DAG(
-   'AvaliaMusica-PreProcessamento',
+   'AvaliaMusica1-PreProcessamento',
    schedule_interval=None,
    catchup=False,
    default_args=default_args
@@ -45,12 +45,8 @@ with DAG(
            
             """.format(pathScript)
         )
-        t0
-        t1        
-        
-
+        [t0,t1]
     with TaskGroup("ImportaDataSets", tooltip="Lê Datasets") as ledatasets:
-        
         t1 = BashOperator(
             dag=dag,
             task_id='GetMusUsers',
@@ -75,14 +71,11 @@ with DAG(
             python3 GetFeaturesEDominiodasMusicas.py
             """.format(pathScript)
         ) 
-        t1
-        tgetMusUserA
-        tgetFeatures
-
+        [t1, tgetMusUserA, tgetFeatures]
     with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
         tfiltraUsers = BashOperator(
             dag=dag,
-            task_id='Busca_MusUsers_No_Dominio',
+            task_id='BuscaMusUsersNoDominio',
             bash_command="""
             cd {0}
             python3 BuscaMusUsersNoDominio.py
@@ -96,12 +89,9 @@ with DAG(
             python3 AnalisaMusUsers.py
             """.format(pathScript)
         )
-
         tfiltraUsers >> tAnalisaMusUsers 
-         
-
     end = DummyOperator(task_id='end')
-   
+
     start >> init >> ledatasets >> filtra >> end
 
         

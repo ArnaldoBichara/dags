@@ -14,7 +14,7 @@ default_args = {
    }
 
 with DAG(
-   'AvaliaMusicaColab-Processamento',
+   'AvaliaMusica3Colab-Processamento',
    schedule_interval=None,
    catchup=False,
    default_args=default_args
@@ -36,7 +36,6 @@ with DAG(
             """.format(pathScript)
         )
         t0        
-        
     with TaskGroup("Filtra_Outliers", tooltip=" ") as filtra_outliers:
         t0= BashOperator(
             dag=dag,
@@ -65,7 +64,6 @@ with DAG(
             """.format(pathScript)
         )
         t2 >> tProcessa        
-
     with TaskGroup("121-200", tooltip=" ") as proc2:    
         t2 = BashOperator(
             dag=dag,
@@ -84,7 +82,6 @@ with DAG(
             """.format(pathScript)
         )
         t2 >> tProcessa        
-
     with TaskGroup("201-270", tooltip=" ") as proc3:    
         t2 = BashOperator(
             dag=dag,
@@ -103,7 +100,6 @@ with DAG(
             """.format(pathScript)
         )
         t2 >> tProcessa        
-
     with TaskGroup("271-400", tooltip=" ") as proc4:    
         t2 = BashOperator(
             dag=dag,
@@ -122,7 +118,6 @@ with DAG(
             """.format(pathScript)
         )
         t2 >> tProcessa        
-
     with TaskGroup("401-700", tooltip=" ") as proc5:    
         t2 = BashOperator(
             dag=dag,
@@ -141,7 +136,6 @@ with DAG(
             """.format(pathScript)
         )
         t2 >> tProcessa        
-
     with TaskGroup("701-1200", tooltip=" ") as proc6:    
         t2 = BashOperator(
             dag=dag,
@@ -160,7 +154,6 @@ with DAG(
             """.format(pathScript)
         )
         t2 >> tProcessa        
-
     with TaskGroup("1201-2000", tooltip=" ") as proc7:    
         t2 = BashOperator(
             dag=dag,
@@ -179,8 +172,6 @@ with DAG(
             """.format(pathScript)
         )
         t2 >> tProcessa        
-
-    
     with TaskGroup("MusCandidatas", tooltip="Monta Músicas Candidatas") as montaMusColab:
         t1 = BashOperator(
             dag=dag,
@@ -191,7 +182,6 @@ with DAG(
             """.format(pathScript)
         )
         t1     
-         
     end = DummyOperator(task_id='end')
 
     start >> init >> filtra_outliers >> proc1 >> proc2 >> proc3 >> proc4 >> proc5 >> proc6 >> proc7 >> montaMusColab >> end

@@ -14,7 +14,7 @@ default_args = {
    }
 
 with DAG(
-   'AvaliaMusica3Colab-Processamento',
+   'AvaliaMusica3ProcessaColab',
    schedule_interval=None,
    catchup=False,
    default_args=default_args

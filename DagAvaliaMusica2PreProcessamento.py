@@ -54,7 +54,15 @@ with DAG(
             python3 GetUserA_AudioFeatures.py
             """.format(pathScript)
         )
-        tgetAFeatures
+        tgetASamples = BashOperator(
+            dag=dag,
+            task_id='Get_UserA_AudioSamples',
+            bash_command="""
+            cd {0}
+            python3 GetUserA_AudioSamples.py
+            """.format(pathScript)
+        )
+        [tgetAFeatures, tgetASamples]
     with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
         tAnaliseFeatures = BashOperator(
             dag=dag,

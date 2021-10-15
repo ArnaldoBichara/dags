@@ -80,7 +80,7 @@ with DAG(
             python3 FiltraAudioFeatures.py
             """.format(pathScript)
         )
-        tfiltraFeatures
+        tAnaliseFeatures >> tfiltraFeatures
     end = DummyOperator(task_id='end')
     
     start >> init >> importa_mus >> filtra >> end

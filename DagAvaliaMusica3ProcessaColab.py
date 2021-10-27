@@ -29,8 +29,8 @@ with DAG(
             bash_command="""
             cd {0}
             rm -f ./Analises/processamentoColab.log
-            rm -f ./Analises/ColabMusUserAEsparsa.pickle
-            rm -f ./Analises/ColabMusUserAbarraEsparsa.pickle
+            rm -f ./FeatureStore/ColabMusUserAEsparsa.pickle
+            rm -f ./FeatureStore/ColabMusUserAbarraEsparsa.pickle
             rm -f ./FeatureStore/ColabVizinhosUserA.pickle            
             rm -f ./FeatureStore/ColabVizinhosUserAbarra.pickle       
             """.format(pathScript)

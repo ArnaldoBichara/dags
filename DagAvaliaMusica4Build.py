@@ -31,6 +31,7 @@ with DAG(
             cd {0}
             rm -f ./Analises/processamentoClassificacao.log
             rm -f ./deployProducao/APIAvaliaMusica/estatisticas.pickle
+            rm -f ./deployProducao/APIAvaliaMusica/modeloClassif.*
             """.format(pathScript)
         )
         t0        
@@ -50,9 +51,10 @@ with DAG(
             task_id='CopiaArqsProducao',
             bash_command="""
             cd {0}
-            cp ./FeatureStore/DominioAudioFeatures.pickle ./deployProducao/APIAvaliaMusica/DominioAudioFeatures.pickle
-            cp ./FeatureStore/MusCandidatasCurte.pickle ./deployProducao/APIAvaliaMusica/MusCandidatasCurte.pickle
-            cp ./FeatureStore/MusCandidatasNaoCurte.pickle ./deployProducao/APIAvaliaMusica/MusCandidatasNaoCurte.pickle            
+            cp ./FeatureStore/DominioAudioFeatures.pickle ./deployProducao/APIAvaliaMusica/
+            cp ./FeatureStore/MusCandidatasCurte.pickle ./deployProducao/APIAvaliaMusica/
+            cp ./FeatureStore/MusCandidatasNaoCurte.pickle ./deployProducao/APIAvaliaMusica/    
+            cp ./FeatureStore/modeloClassif.* ./deployProducao/APIAvaliaMusica/        
             """.format(pathScript)
         )
         t1 = BashOperator(

@@ -62,7 +62,16 @@ with DAG(
             python3 GetUserA_AudioSamples.py
             """.format(pathScript)
         )
-        [tgetAFeatures, tgetASamples]
+        tmontaEspectro = BashOperator(
+            dag=dag,
+            task_id='MontaEspectrogramas',
+            bash_command="""
+            cd {0}
+            python3 MontaEspectrogramas.py
+            """.format(pathScript)
+        )
+        tgetAFeatures
+        tgetASamples >> tmontaEspectro
     with TaskGroup("Filtros", tooltip="Execução de filtros") as filtra:
         tAnaliseFeatures = BashOperator(
             dag=dag,

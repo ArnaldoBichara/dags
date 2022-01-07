@@ -67,7 +67,7 @@ with DAG(
             task_id='MontaEspectrogramas',
             bash_command="""
             cd {0}
-            python3 MontaEspectrogramas.py
+            python3 EspectrogramasMontagem.py
             """.format(pathScript)
         )
         tgetAFeatures
